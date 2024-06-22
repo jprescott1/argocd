@@ -5,5 +5,5 @@ global:
   domain: argocd.gloogleegloo.com
 
   # -- Common labels for the all resources
-  additionalLabels:
-     test: jimmy-values
+  # additionalLabels:
+     # foo: bar
