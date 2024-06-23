@@ -1,2 +1,2 @@
-# argocd
-Main ArgoCD deployment
+# ArgoCD
+Manages Argo and all other apps
