@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io/background
+  labels:
+    managed-by: ArgoCD
+spec:
+  project: default
+  sources:
+    - chart: argo-cd
+      repoURL: https://argoproj.github.io/argo-helm
+      targetRevision: 7.1.*
+      helm:
+        releaseName: argocd
+        valuesObject:
+          global:
+            domain: argocd.gloogleegloo.com
+          configs:
+            params:
+              server.insecure: true
+          # controller:
+          #   metrics:
+          #     enabled: true
+          #     serviceMonitor:
+          #       enabled: true
+          #       namespace: "argocd"
+          #       selector:
+          #         prometheus: argocd
+          # redis:
+          #   metrics:
+          #     enabled: true
+          #     serviceMonitor:
+          #       enabled: true
+          #       namespace: "argocd"
+          #       selector:
+          #         prometheus: argocd
+          # server:
+          #   metrics:
+          #     enabled: true
+          #     serviceMonitor:
+          #       enabled: true
+          #       namespace: "argocd"
+          #       selector:
+          #         prometheus: argocd
+          # repoServer:
+          #   metrics:
+          #     enabled: true
+          #     serviceMonitor:
+          #       enabled: true
+          #       namespace: "argocd"
+          #       selector:
+          #         prometheus: argocd
+    # - repoURL: https://github.com/jprescott1/doesnotexistyet.git
+    #   path: path/to/manifests
+    #   targetRevision: HEAD
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
